@@ -1,109 +1,55 @@
-rule-providers:
-  reject:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt"
-    path: ./ruleset/reject.yaml
-    interval: 86400
+port: 7890
+socks-port: 7891
+allow-lan: true
+mode: Rule
+log-level: info
+external-controller: :9090
 
-  icloud:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/icloud.txt"
-    path: ./ruleset/icloud.yaml
-    interval: 86400
+proxies:
 
-  apple:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/apple.txt"
-    path: ./ruleset/apple.yaml
-    interval: 86400
-
-  google:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt"
-    path: ./ruleset/google.yaml
-    interval: 86400
-
-  proxy:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt"
-    path: ./ruleset/proxy.yaml
-    interval: 86400
-
-  direct:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
-    path: ./ruleset/direct.yaml
-    interval: 86400
-
-  private:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt"
-    path: ./ruleset/private.yaml
-    interval: 86400
-
-  gfw:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt"
-    path: ./ruleset/gfw.yaml
-    interval: 86400
-
-  tld-not-cn:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt"
-    path: ./ruleset/tld-not-cn.yaml
-    interval: 86400
-
-  telegramcidr:
-    type: http
-    behavior: ipcidr
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/telegramcidr.txt"
-    path: ./ruleset/telegramcidr.yaml
-    interval: 86400
-
-  cncidr:
-    type: http
-    behavior: ipcidr
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/cncidr.txt"
-    path: ./ruleset/cncidr.yaml
-    interval: 86400
-
-  lancidr:
-    type: http
-    behavior: ipcidr
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt"
-    path: ./ruleset/lancidr.yaml
-    interval: 86400
-
-  applications:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt"
-    path: ./ruleset/applications.yaml
-    interval: 86400
+proxy-groups:
+  - { name: "🚀 节点选择", type: select, proxies: ["♻️ 自动选择"] }
+  - { name: "♻️ 自动选择", type: url-test, proxies: [], url: "http://cp.cloudflare.com", interval: 300, tolerance: 50 }
+  - { name: "🌍 国外媒体", type: select, proxies: ["🚀 节点选择", "♻️ 自动选择", "🎯 全球直连"] }
+  - { name: "📲 电报信息", type: select, proxies: ["🚀 节点选择", "♻️ 自动选择", "🎯 全球直连"] }
+  - { name: "Ⓜ️ 微软服务", type: select, proxies: ["🚀 节点选择", "♻️ 自动选择", "🎯 全球直连"] }
+  - { name: "🍎 苹果服务", type: select, proxies: ["🚀 节点选择", "♻️ 自动选择", "🎯 全球直连"] }
+  - { name: "📢 谷歌FCM", type: select, proxies: ["🚀 节点选择", "♻️ 自动选择", "🎯 全球直连"] }
+  - { name: "🐟 漏网之鱼", type: select, proxies: ["🚀 节点选择", "♻️ 自动选择", "🎯 全球直连"] }
+  - { name: "🎯 全球直连", type: select, proxies: [/不添加任何节点/, "DIRECT"] }
+  - { name: "🍃 应用净化", type: select, proxies: [/不添加任何节点/, "REJECT"] }
 
 rules:
-  - RULE-SET,applications,DIRECT
-  - DOMAIN,clash.razord.top,DIRECT
-  - DOMAIN,yacd.haishan.me,DIRECT
-  - RULE-SET,private,DIRECT
-  - RULE-SET,reject,REJECT
-  - RULE-SET,icloud,DIRECT
-  - RULE-SET,apple,DIRECT
-  - RULE-SET,google,PROXY
-  - RULE-SET,proxy,PROXY
-  - RULE-SET,direct,DIRECT
-  - RULE-SET,lancidr,DIRECT
-  - RULE-SET,cncidr,DIRECT
-  - RULE-SET,telegramcidr,PROXY
-  - GEOIP,LAN,DIRECT
-  - GEOIP,CN,DIRECT
-  - MATCH,PROXY
+  - DOMAIN,github.moeyy.xyz,DIRECT
+  - RULE-SET,LocalAreaNetwork,🎯 全球直连
+  - RULE-SET,UnBan,🎯 全球直连
+  - RULE-SET,GoogleCN,🎯 全球直连
+  - RULE-SET,SteamCN,🎯 全球直连
+  - RULE-SET,ChinaDomain,🎯 全球直连
+  - RULE-SET,ChinaCompanyIp,🎯 全球直连
+  - RULE-SET,BanAD,🍃 应用净化
+  - RULE-SET,BanProgramAD,🍃 应用净化
+  - RULE-SET,GoogleFCM,📢 谷歌FCM
+  - RULE-SET,Microsoft,Ⓜ️ 微软服务
+  - RULE-SET,Apple,🍎 苹果服务
+  - RULE-SET,Telegram,📲 电报信息
+  - RULE-SET,ProxyMedia,🌍 国外媒体
+  - RULE-SET,ProxyLite,🚀 节点选择
+  - GEOIP,CN,🎯 全球直连
+  - MATCH,🐟 漏网之鱼
+
+rule-providers:
+  LocalAreaNetwork: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/LocalAreaNetwork.yaml', interval: 864000, path: ./rules/LocalAreaNetwork.yaml }
+  UnBan: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/UnBan.yaml', interval: 864000, path: ./rules/UnBan.yaml }
+  BanAD: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/BanAD.yaml', interval: 864000, path: ./rules/BanAD.yaml }
+  BanProgramAD: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/BanProgramAD.yaml', interval: 864000, path: ./rules/BanProgramAD.yaml }
+  GoogleFCM: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/Ruleset/GoogleFCM.yaml', interval: 864000, path: ./rules/GoogleFCM.yaml }
+  GoogleCN: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/Ruleset/GoogleCN.yaml', interval: 864000, path: ./rules/GoogleCN.yaml }
+  SteamCN: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/Ruleset/SteamCN.yaml', interval: 864000, path: ./rules/SteamCN.yaml }
+  Microsoft: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/Ruleset/Microsoft.yaml', interval: 864000, path: ./rules/Microsoft.yaml }
+  Apple: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/Apple.yaml', interval: 864000, path: ./rules/Apple.yaml }
+  Telegram: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/Ruleset/Telegram.yaml', interval: 864000, path: ./rules/Telegram.yaml }
+  ProxyMedia: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/ProxyMedia.yaml', interval: 864000, path: ./rules/ProxyMedia.yaml }
+  ProxyLite: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/ProxyLite.yaml', interval: 864000, path: ./rules/ProxyLite.yaml }
+  ChinaDomain: { type: http, behavior: classical, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/ChinaDomain.yaml', interval: 864000, path: ./rules/ChinaDomain.yaml }
+  ChinaCompanyIp: { type: http, behavior: ipcidr, url: 'https://github.moeyy.xyz/https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/ChinaCompanyIp.yaml', interval: 864000, path: ./rules/ChinaCompanyIp.yaml }
